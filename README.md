@@ -76,7 +76,7 @@ Below options are available for Application gateway configuration .
 
 ```hcl
 module "applicationGateway" {
-  source  = "https://innersource.soprasteria.com/group-cloud-coe/cloudnetes/modules/azure/terraform-azure-applicationgateway.git"
+  source  = ""
   version = "1.0.0"
 
   prefix = 
