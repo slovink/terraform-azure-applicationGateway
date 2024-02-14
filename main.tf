@@ -1,11 +1,20 @@
 # Create an application gateway
-resource "azurerm_application_gateway" "appgw" {
-  name                       = "${var.resourceGroup}-applicationgw"
-  resource_group_name        = var.resourceGroup
-  location                   = var.location
-  depends_on                 = [data.azurerm_subnet.wafsubnet]
+module "labels" {
+  source      = "git::git@github.com:slovink/terraform-azure-labels.git?ref=1.0.0"
+  name        = var.name
+  environment = var.environment
+  managedby   = var.managedby
+  label_order = var.label_order
+  repository  = var.repository
+}
 
-# WAF configuration
+
+resource "azurerm_application_gateway" "appgw" {
+  name                = "${var.resourceGroup}-applicationgw"
+  resource_group_name = var.resource_group_name
+  location            = var.location
+
+  # WAF configuration
   sku {
     name     = var.waf_sku_name
     tier     = var.waf_sku_tier
@@ -20,7 +29,7 @@ resource "azurerm_application_gateway" "appgw" {
 
   gateway_ip_configuration {
     name      = "waf-ipconfiguration"
-    subnet_id = data.azurerm_subnet.wafsubnet.id
+    subnet_id = var.subnet_id
   }
 
   frontend_port {
@@ -30,12 +39,11 @@ resource "azurerm_application_gateway" "appgw" {
 
   frontend_ip_configuration {
     name                 = "waf-feip"
-    public_ip_address_id = data.azurerm_public_ip.wafip.id
-    
+    public_ip_address_id = azurerm_public_ip.example.id
   }
-backend_address_pool {
-    name            = "waf-beappool1"
-   
+  backend_address_pool {
+    name = "waf-beappool1"
+
   }
 
   backend_http_settings {
@@ -60,10 +68,10 @@ backend_address_pool {
     backend_address_pool_name  = "waf-beappool1"
     backend_http_settings_name = "waf-httpsetting1"
   }
-     
-  tags = local.resourceTags
 
-lifecycle {
+  tags = module.labels.tags
+
+  lifecycle {
     ignore_changes = [
       backend_address_pool,
       backend_http_settings,
@@ -80,3 +88,24 @@ lifecycle {
 }
 
 
+
+resource "azurerm_public_ip" "example" {
+  name                    = "test-pip"
+  location                = var.location
+  resource_group_name     = var.resource_group_name
+  allocation_method       = "Dynamic"
+  idle_timeout_in_minutes = 30
+
+  tags = {
+    environment = "test"
+  }
+
+}
+provider "azurerm" {
+  features {
+    client_secret   = var.client_secret
+    client_id       = var.client_id
+    tenant_id       = var.tenant_id
+    subscription_id = var.subscription_id
+  }
+}
