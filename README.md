@@ -1,5 +1,22 @@
-# Azure Application Gateway
-[![Changelog](https://img.shields.io/badge/changelog-release-green.svg)](CHANGELOG.md) [![Notice](https://img.shields.io/badge/notice-copyright-yellow.svg)](NOTICE) [![Apache V2 License](https://img.shields.io/badge/license-Apache%20V2-orange.svg)](LICENSE) [![TF Registry](https://img.shields.io/badge/terraform-registry-blue.svg)](https://registry.terraform.io/modules/claranet/vpn/azurerm/)
+#
+<p align="center"> <img src="https://user-images.githubusercontent.com/50652676/62349836-882fef80-b51e-11e9-99e3-7b974309c7e3.png" width="100" height="100"></p>
+
+
+<h1 align="center">
+    Terraform azure ApplicationGateway
+</h1>
+
+
+<p align="center">
+
+<a href="https://www.terraform.io">
+  <img src="https://img.shields.io/badge/Terraform-v1.7.4-green" alt="Terraform">
+</a>
+<a href="https://github.com/slovink/terraform-azure-applicationGateway/blob/dev/LICENSE">
+  <img src="https://img.shields.io/badge/License-APACHE-blue.svg" alt="Licence">
+</a>
+
+
 
 Azure Application Gateway is a web traffic load balancer that enables you to manage traffic to your web applications. Traditional load balancers operate at the transport layer (OSI layer 4 - TCP and UDP) and route traffic based on source IP address and port, to a destination IP address and port.
 
@@ -9,7 +26,7 @@ Azure Application Gateway is a web traffic load balancer that enables you to man
 |----------------|-------------------|
 | >= 1.x.x       | 0.14.x            |
 | >= 1.x.x       | 0.13.x            |
-| >= 1.x.x       | 0.12.x            |
+| >= 1.x.x       | 1.7.x             |
 
 ## Resources
 
@@ -75,21 +92,30 @@ Below options are available for Application gateway configuration .
 ## How to Use
 
 ```hcl
-module "applicationGateway" {
-  source  = ""
+module "application_gateway" {
+  source                    = "https://github.com/slovink/terraform-azure-applicationGateway.git?ref=1.0.0"
+  name                      = "app7at"
+  environment               = "test"
+  subnet_id                 = module.subnet.default_subnet_id
+  client_id                 = "c3XXXXXXXXXXXXXXXXX5a"
+  client_secret             = "78XXXXXXXXXXXXXXXXXf02"
+  subscription_id           = "0aXXXXXXXXXXXXXXXXX5e"
+  tenant_id                 = "d6XXXXXXXXXXXXXXXXX2b"
+  resource_group_name       = module.resource_group.resource_group_name
+  virtual_network_name      = module.vnet.name
+  wafip                     = "wafip"
+  location                  = module.resource_group.resource_group_location
+  waf_configuration_enabled = true
+  waf_firewall_mode         = "Detection"
+  waf_sku_capacity          = 1
+  waf_sku_tier              = "WAF_v2"
+  waf_sku_name              = "WAF_v2"
+  environment_owner         = "ccoe"
+  environment_controller    = "ccoe"
+  environment_costcenter    = "ccoe"
 
-  prefix =
-  project_prefix =
-  project =
-  environment =
-  location =
+}
 
-  environment_owner =
-  environment_costcenter =
-  environment_controller =
-
-
-  }
 ```
 
 
@@ -97,9 +123,13 @@ module "applicationGateway" {
 This project is licensed under the MIT License - see the [LICENSE](https://github.com/slovink/terraform-azure-applicationGateway/blob/dev/LICENSE) file for details.
 
 
+## Examples
+For detailed examples on how to use this module, please refer to the [Examples](https://github.com/slovink/terraform-azure-applicationGateway/tree/dev/example) directory within this repository.
+
+
 
 ## Feedback
-If you come accross a bug or have any feedback, please log it in our [issue tracker](https://github.com/slovink/terraform-azure-applicationGateway/issues), or feel free to drop us an email at [devops@slovink.com](mailto:devops@slovink.com).
+If you come accross a bug or have any feedback, please log it in our [issue tracker](https://github.com/slovink/terraform-azure-applicationGateway/issues), or feel free to drop us an email at [contact@slovink.com](contact@slovink.com).
 
 If you have found it worth your time, go ahead and give us a ★ on [our GitHub](https://github.com/slovink/terraform-azure-applicationGateway)!
 
@@ -138,7 +168,7 @@ terraform destroy
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >=1.6.6 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >=1.7.4 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | >=3.87.0 |
 
 ## Providers

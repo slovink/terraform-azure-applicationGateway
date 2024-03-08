@@ -1,0 +1,62 @@
+---
+#
+# This is the canonical configuration for the `README.md`
+# Run `make readme` to rebuild the `README.md`
+#
+
+# Name of this project
+name : Terraform AZURE APPLICATIONGATEWAY
+
+# License of this project
+license: "MIT"
+
+# Canonical GitHub repo
+github_repo: git@github.com:slovink/terraform-azure-applicationGateway.git
+
+# Badges to display
+badges:
+  - name: "Terraform"
+    image: "https://img.shields.io/badge/Terraform-v1.7.4-green"
+    url: "https://www.terraform.io"
+  - name: "Licence"
+    image: "https://img.shields.io/badge/License-MIT-blue.svg"
+    url: "https://github.com/slovink/terraform-azure-applicationGateway/blob/master/LICENSE"
+
+#  description of this project
+description: |-
+  Terraform module to create Azure applicationgateway service resource on AZURE.
+# extra content
+include:
+  - "terraform.md"
+
+# How to use this project
+# How to use this project
+usage: |-
+  Here are some examples of how you can use this module in your inventory structure:
+  ### azure applicationgateway
+  ```hcl
+
+     # Basic
+   module "application_gateway" {
+    source                    = "../"
+    name                      = "app7at"
+    environment               = "test"
+    subnet_id                 = module.subnet.default_subnet_id
+    client_id                 = "c3XXXXXXXXXXXXXXXXX5a"
+    client_secret             = "78XXXXXXXXXXXXXXXXXf02"
+    subscription_id           = "0aXXXXXXXXXXXXXXXXX5e"
+    tenant_id                 = "d6XXXXXXXXXXXXXXXXX2b"
+    resource_group_name       = module.resource_group.resource_group_name
+    virtual_network_name      = module.vnet.name
+    wafip                     = "wafip"
+    location                  = module.resource_group.resource_group_location
+    waf_configuration_enabled = true
+    waf_firewall_mode         = "Detection"
+    waf_sku_capacity          = 1
+    waf_sku_tier              = "WAF_v2"
+    waf_sku_name              = "WAF_v2"
+    environment_owner         = "ccoe"
+    environment_controller    = "ccoe"
+    environment_costcenter    = "ccoe"
+  }
+  ```
